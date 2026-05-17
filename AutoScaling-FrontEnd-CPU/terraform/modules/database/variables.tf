@@ -52,9 +52,9 @@ variable "allowed_security_group_id" {
 }
 
 variable "backup_retention_period" {
-  description = "Number of days to retain backups (minimum 1 for Aurora)"
+  description = "Number of days to retain backups (0 = disabled for demo)"
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "skip_final_snapshot" {

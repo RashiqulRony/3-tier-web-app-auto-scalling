@@ -2,7 +2,7 @@
 data "template_file" "backend_userdata" {
   template = <<-EOF
     #!/bin/bash
-    wget https://raw.githubusercontent.com/sarowar-alam/3-tier-web-app-auto-scalling/refs/heads/main/AutoScaling-FrontEnd-CPU/deploy-backend.sh
+    wget ${var.github_repo_url}/raw/main/AutoScaling-FrontEnd-CPU/deploy-backend.sh
     chmod +x deploy-backend.sh
     ./deploy-backend.sh
   EOF
