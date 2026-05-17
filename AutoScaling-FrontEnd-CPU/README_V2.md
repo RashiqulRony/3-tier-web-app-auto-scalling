@@ -92,7 +92,7 @@ Internet
 
 Understanding what each file does helps you navigate this project:
 
-### Golden AMI Creation Scripts (Instructor Use Only)
+### Golden AMI Creation Scripts (Optional - Already Provided)
 These scripts prepare the base AMIs with all required software:
 
 | File | Purpose | When to Use |
@@ -100,7 +100,7 @@ These scripts prepare the base AMIs with all required software:
 | `frontend-userdata.sh` | Installs nginx, Node.js 20, git on Amazon Linux 2023 | Run ONCE to create Frontend Golden AMI |
 | `backend-userdata.sh` | Installs Node.js 20, PM2, PostgreSQL client | Run ONCE to create Backend Golden AMI |
 
-**⚠️ Note:** Your instructor has already created these AMIs (`ami-0dab0b890a96c6f37` and `ami-032e8cf6d0d558851`). You do NOT need to run these scripts for this lab.
+**⚠️ Note:** These AMIs are already created and provided (`ami-0dab0b890a96c6f37` and `ami-032e8cf6d0d558851`). You do NOT need to run these scripts - they're included for reference only.
 
 ### Deployment Scripts (Runs on Every Instance Launch)
 These scripts execute automatically when instances boot:
@@ -150,7 +150,7 @@ These scripts execute automatically when instances boot:
 
 This project uses a **Golden AMI** approach for faster, more reliable instance launches:
 
-### Phase 1: Golden AMI Creation (One-Time, Done by Instructor)
+### Phase 1: Golden AMI Creation (One-Time, Already Done)
 
 ```
 Amazon Linux 2023 Base AMI
@@ -174,7 +174,7 @@ Amazon Linux 2023 Base AMI
 **Duration:** ~10-15 minutes per AMI  
 **Result:** Pre-baked AMIs with all software installed  
 
-**Your Golden AMIs (provided):**
+**Golden AMIs to use:**
 - **Frontend:** `ami-0dab0b890a96c6f37`
 - **Backend:** `ami-032e8cf6d0d558851`
 
