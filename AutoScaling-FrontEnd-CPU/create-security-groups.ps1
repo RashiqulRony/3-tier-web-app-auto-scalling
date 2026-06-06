@@ -6,8 +6,8 @@
 
 $PROFILE = "sarowar-ostad"
 $REGION = "ap-south-1"
-$VPC_ID = "vpc-06f7dead5c49ece64"
-$KEY_PAIR = "sarowar-ostad-mumbai"
+$VPC_ID = "vpc-0a9b75a4b2b020a0e"
+$KEY_PAIR = "sarowar-ostad"
 
 Write-Host "==================================================" -ForegroundColor Cyan
 Write-Host "Creating Security Groups for BMI App Auto-Scaling" -ForegroundColor Cyan
