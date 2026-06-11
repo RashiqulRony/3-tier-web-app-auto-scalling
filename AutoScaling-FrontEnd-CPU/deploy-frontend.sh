@@ -23,6 +23,10 @@ echo "Fetching backend ALB URL from Parameter Store..."
 BACKEND_ALB_URL=$(aws ssm get-parameter --name "/bmi-app/backend-alb-url" --region ${REGION} --query 'Parameter.Value' --output text)
 echo "Backend ALB URL: ${BACKEND_ALB_URL}"
 
+# Extract hostname only (nginx upstream requires host:port, not full URL)
+BACKEND_HOST=$(echo "${BACKEND_ALB_URL}" | sed 's|http://||' | sed 's|/.*||')
+echo "Backend Host: ${BACKEND_HOST}"
+
 # Clone repository
 echo "Cloning repository..."
 cd /var/www
@@ -59,6 +63,12 @@ npm run build
 # Configure nginx
 echo "Configuring nginx..."
 sudo tee /etc/nginx/conf.d/frontend.conf > /dev/null << 'EOF'
+# Backend upstream - uses host:port to avoid nginx URL parsing issues
+upstream backend_alb {
+    server ${BACKEND_HOST}:80;
+    keepalive 32;
+}
+
 server {
     listen 80;
     server_name _;
@@ -92,16 +102,16 @@ server {
 
     # Proxy API requests to backend ALB
     location /api/ {
-        proxy_pass ${BACKEND_ALB_URL}/api/;
+        proxy_pass http://backend_alb;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+        proxy_set_header Connection upgrade;
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        
+
         # Timeouts
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
@@ -110,8 +120,8 @@ server {
 }
 EOF
 
-# Replace placeholder with actual backend URL in nginx config
-sudo sed -i "s|\${BACKEND_ALB_URL}|http://${BACKEND_ALB_URL}|g" /etc/nginx/conf.d/frontend.conf
+# Replace hostname placeholder in nginx upstream block
+sudo sed -i "s|\${BACKEND_HOST}|${BACKEND_HOST}|g" /etc/nginx/conf.d/frontend.conf
 
 # Remove conflicting default server block from nginx.conf
 echo "Removing default nginx server block to avoid conflicts..."
