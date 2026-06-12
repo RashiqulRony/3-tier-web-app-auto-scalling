@@ -1,5 +1,8 @@
 # Terraform files
 **/.terraform/*
+# tfstate tracked locally (local backend)
+!AutoScaling-FrontEnd-CPU/terraform/terraform.tfstate
+!AutoScaling-FrontEnd-CPU/terraform/terraform.tfstate.backup
 *.tfstate
 *.tfstate.*
 *.tfvars
