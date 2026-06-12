@@ -54,7 +54,7 @@ variable "allowed_security_group_id" {
 variable "backup_retention_period" {
   description = "Number of days to retain backups (0 = disabled for demo)"
   type        = number
-  default     = 0
+  default     = 1
 }
 
 variable "skip_final_snapshot" {
