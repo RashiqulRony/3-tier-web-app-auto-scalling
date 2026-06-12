@@ -11,8 +11,20 @@ echo "========================================="
 echo "Backend Deployment Started: $(date)"
 echo "========================================="
 
-# Ensure PM2 is accessible
-export PATH=$PATH:/usr/bin:/usr/local/bin
+# Ensure PM2 and Node.js are accessible - search all common install locations
+export PATH=$PATH:/usr/bin:/usr/local/bin:/usr/local/lib/node_modules/.bin
+# NodeSource installs npm globals here on Amazon Linux 2023
+NPM_GLOBAL_BIN=$(npm root -g 2>/dev/null | sed 's|/node_modules$|/.bin|' || echo '')
+if [ -n "$NPM_GLOBAL_BIN" ]; then
+    export PATH=$PATH:$NPM_GLOBAL_BIN
+fi
+# Also find pm2 explicitly
+if ! command -v pm2 &>/dev/null; then
+    PM2_PATH=$(find /usr/local /usr -name pm2 -type f 2>/dev/null | head -1 || true)
+    if [ -n "$PM2_PATH" ]; then
+        export PATH=$PATH:$(dirname $PM2_PATH)
+    fi
+fi
 
 # Get instance metadata
 INSTANCE_ID=$(ec2-metadata --instance-id | cut -d " " -f 2)
@@ -24,7 +36,8 @@ echo "Region: ${REGION}"
 # Verify Node.js and PM2 are available
 echo "Node.js version: $(node --version)"
 echo "NPM version: $(npm --version)"
-echo "PM2 version: $(pm2 --version)"
+echo "PM2 location: $(command -v pm2 || echo NOT_FOUND)"
+echo "PM2 version: $(pm2 --version 2>/dev/null || echo NOT_INSTALLED)"
 
 # Fetch database credentials from Parameter Store
 echo "Fetching database credentials from Parameter Store..."

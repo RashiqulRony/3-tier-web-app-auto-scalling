@@ -8,17 +8,15 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000, // Return error after 2 seconds if can't connect
 });
 
-// Handle pool errors
+// Handle pool errors - log but do not crash, let requests return 503
 pool.on('error', (err, client) => {
-  console.error('Unexpected error on idle PostgreSQL client:', err);
-  process.exit(-1);
+  console.error('Unexpected error on idle PostgreSQL client:', err.message);
 });
 
-// Test connection on startup
+// Test connection on startup - log result but never exit
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
-    console.error('❌ Database connection failed:', err.message);
-    process.exit(1);
+    console.error('⚠️  Database not yet reachable on startup (will retry per-request):', err.message);
   } else {
     console.log('✅ Database connected successfully at:', res.rows[0].now);
   }
