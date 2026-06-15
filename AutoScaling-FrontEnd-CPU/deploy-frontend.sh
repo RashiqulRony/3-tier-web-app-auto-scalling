@@ -5,7 +5,7 @@
 set -e
 
 LOG_FILE="/var/log/frontend-deploy.log"
-exec > >(tee -a ${LOG_FILE}) 2>&1
+exec >> ${LOG_FILE} 2>&1
 
 echo "========================================="
 echo "Frontend Deployment Started: $(date)"
