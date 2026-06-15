@@ -21,8 +21,8 @@ $ErrorActionPreference = "Stop"
 # ─── Configuration ──────────────────────────────────────────────────────────
 $PROFILE         = "sarowar-ostad"
 $REGION          = "ap-south-1"
-$VPC_ID          = "vpc-08fa4d8bffbe53a5e"
-$PUBLIC_SUBNET   = "subnet-040fca137a2251b25"   # devops-subnet-public1-ap-south-1a
+$VPC_ID          = "vpc-0f6ed77f71ef6e7f7"
+$PUBLIC_SUBNET   = "subnet-0a7098152cde9cb3c"   # devops-subnet-public1-ap-south-1a
 $INSTANCE_TYPE   = "t3.micro"
 $TFVARS_PATH     = "$PSScriptRoot\terraform\terraform.tfvars"
 $REPO_ROOT       = (Resolve-Path "$PSScriptRoot\..").Path
