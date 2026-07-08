@@ -57,3 +57,6 @@ logs/
 # Database
 *.sql.backup
 *.dump
+
+Autoscaling-FrontEnd-CPU/provision-state.json
+AutoScaling-FrontEnd-CPU/provision-state.json
