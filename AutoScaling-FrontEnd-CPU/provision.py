@@ -62,7 +62,7 @@ log = _setup_log()
 # Config
 # ─────────────────────────────────────────────────────────────────────────────
 
-DEFAULTS = {'profile': 'sarowar-ostad', 'region': 'ap-south-1', 'db_pass': 'BMIApp2024Secure!'}
+DEFAULTS = {'profile': 'sarowar-ostad', 'region': 'ap-south-1', 'db_pass': '0stad2025'}
 
 CFG = {
     'vpc_name':   'devops-vpc',
