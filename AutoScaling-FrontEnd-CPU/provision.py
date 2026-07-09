@@ -738,7 +738,14 @@ def _bake_golden_ami(ec2, ssm_client, label, al2023_ami, subnet_id, sg_id,
     terminal = {'Success', 'Failed', 'Cancelled', 'TimedOut', 'Undeliverable', 'Terminated'}
     deadline = time.time() + 1200
     while time.time() < deadline:
-        r = ssm_client.get_command_invocation(CommandId=cmd_id, InstanceId=instance_id)
+        try:
+            r = ssm_client.get_command_invocation(CommandId=cmd_id, InstanceId=instance_id)
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'InvocationDoesNotExist':
+                log.debug(f"  [{label}] Invocation not yet registered — retrying in 10s…")
+                time.sleep(10)
+                continue
+            raise
         status = r['StatusDetails']
         log.info(f"  [{label}] Setup status: {status}")
         if status == 'Success':
